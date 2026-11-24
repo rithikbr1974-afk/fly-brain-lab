@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fly World</title>
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+</head>
+<body class="heaven">
+<canvas id="world"></canvas>
+<div id="fade"></div>
+
+<div class="hud top-left">
+  <h1>Fly World</h1>
+  <p class="sub">A real fly brain (138,639 neurons) living in a 3D world</p>
+  <div class="realm">
+    <button id="toHeaven" class="on">Heaven</button>
+    <button id="toHell">Hell</button>
+  </div>
+  <p class="realm-note" id="realmNote"></p>
+</div>
+
+<div class="hud top-right">
+  <div class="card brain-card">
+    <div class="card-head"><span>Live brain</span><span id="brainSpeed" class="dim">connecting…</span></div>
+    <canvas id="mini"></canvas>
+    <div class="sec">Its own urges <span class="dim">random, sent into the brain</span></div>
+    <div class="mind" id="mind"></div>
+    <div class="sec">Command neurons <span class="dim">what the brain does with them</span></div>
+    <div class="meters" id="meters"></div>
+    <div class="senses" id="senses"></div>
+  </div>
+</div>
+
+<div class="hud bottom-left">
+  <div class="card status">
+    <div class="doing"><span id="tag" class="tag body">body</span><span id="doing">Waking up…</span></div>
+    <div class="why" id="why"></div>
+    <div class="bars">
+      <label>Energy <span class="bar"><i id="energy"></i></span></label>
+      <label>Water <span class="bar water"><i id="water"></i></span></label>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
+</div>
+
+<div class="hud bottom-center">
+  <button id="dropSugar" title="Put sugar in front of the fly">Drop sugar</button>
+  <button id="dropWater" title="Put a water drop in front of the fly">Drop water</button>
+  <button id="dropBitter" title="Put a bitter berry in front of the fly">Drop bitter</button>
+  <button id="puff" title="Blow air on its antennae">Puff air</button>
+  <button id="shadow" title="Send a swooping shadow">Shadow</button>
+  <button id="cam" title="Change camera">Camera: follow</button>
+</div>
+
+<div class="hud legend">
+  <span><b class="tag brain">brain</b> decided by the simulated neurons</span>
+  <span><b class="tag body">body</b> simple reflex outside the connectome</span>
+  <span class="dim">drag to look around &middot; scroll to zoom</span>
+</div>
+
+<script type="module" src="world.js"></script>
+</body>
+</html>

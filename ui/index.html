@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fly Brain Lab</title>
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg viewBox="0 0 24 24" class="logo"><circle cx="12" cy="12" r="3.2"/><circle cx="5" cy="7" r="1.6"/><circle cx="19" cy="7" r="1.6"/><circle cx="6" cy="18" r="1.6"/><circle cx="18" cy="18" r="1.6"/><path d="M12 12L5 7M12 12l7-5M12 12l-6 6M12 12l6 6"/></svg>
+    <div>
+      <h1>Fly Brain Lab</h1>
+      <p id="sub">A whole fruit fly brain, neuron by neuron, running on this PC</p>
+    </div>
+  </div>
+  <div class="presets" id="presets"></div>
+</header>
+
+<main>
+  <section class="panel controls">
+    <h2>Senses</h2>
+    <div id="senses"></div>
+
+    <h2>Optogenetics <span class="tag">switch on a cell type</span></h2>
+    <div class="row">
+      <input id="actType" list="typeList" placeholder="e.g. MDN, DNp01, CB0701" autocomplete="off">
+      <input id="actHz" type="number" value="150" min="10" max="400" step="10" title="Hz">
+      <button class="small" id="actAdd">Add</button>
+    </div>
+    <div class="chips" id="actChips"></div>
+
+    <h2>Knock out <span class="tag">silence a cell type</span></h2>
+    <div class="row">
+      <input id="silType" list="typeList" placeholder="e.g. DNp01" autocomplete="off">
+      <button class="small" id="silAdd">Add</button>
+    </div>
+    <div class="chips" id="silChips"></div>
+    <datalist id="typeList"></datalist>
+
+    <div class="row run-row">
+      <label>Brain time
+        <select id="ms"><option value="300">0.3 s</option><option value="500" selected>0.5 s</option><option value="1000">1 s</option></select>
+      </label>
+      <label>Trials
+        <select id="trials"><option>2</option><option selected>4</option><option>8</option></select>
+      </label>
+    </div>
+    <button id="run" class="run">Run the brain</button>
+    <p class="status" id="status">Pick a sense, then run.</p>
+  </section>
+
+  <section class="panel brain">
+    <canvas id="brain3d"></canvas>
+    <div class="overlay top-left">
+      <div class="clock"><span id="clock">0.0</span> ms</div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="overlay bottom">
+      <button class="small" id="play" disabled>Replay</button>
+      <input type="range" id="scrub" min="0" max="1000" value="0" disabled>
+      <select id="speed" title="Replay speed"><option value="0.02">50x slower</option><option value="0.05" selected>20x slower</option><option value="0.2">5x slower</option></select>
+    </div>
+    <div class="hint">drag to turn &middot; scroll to zoom</div>
+  </section>
+
+  <section class="panel side">
+    <div class="fly-stage">
+      <svg id="fly" viewBox="0 0 320 200" aria-label="the fly">
+        <defs>
+          <radialGradient id="eyeG" cx="40%" cy="35%"><stop offset="0" stop-color="#ff8a7a"/><stop offset="1" stop-color="#a3141c"/></radialGradient>
+          <linearGradient id="bodyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a7a63"/><stop offset="1" stop-color="#4a3f31"/></linearGradient>
+          <linearGradient id="abdG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9a86a"/><stop offset="1" stop-color="#6e5530"/></linearGradient>
+        </defs>
+        <line x1="0" y1="168" x2="320" y2="168" class="ground"/>
+        <g id="drop" class="drop"><path d="M92 160c-4 6-6 9-6 11a6 6 0 0012 0c0-2-2-5-6-11z"/></g>
+        <g id="flyBody">
+          <g id="legs" class="legs">
+            <path id="legHind" d="M196 112 L214 132 L222 166"/>
+            <path id="legMid" d="M168 116 L172 140 L170 166"/>
+            <path id="legFront" d="M146 112 L128 134 L122 166"/>
+          </g>
+          <g id="wing" class="wing"><path d="M170 92 C200 60 262 58 286 84 C266 100 214 104 172 98 Z"/></g>
+          <ellipse cx="222" cy="108" rx="44" ry="24" fill="url(#abdG)"/>
+          <path d="M196 92 q4 16 0 32 M214 88 q5 20 0 40 M232 88 q5 20 0 40 M250 92 q4 16 0 32" class="stripes"/>
+          <ellipse cx="166" cy="104" rx="28" ry="22" fill="url(#bodyG)"/>
+          <g id="head">
+            <g id="proboscis" class="proboscis"><path d="M118 116 L116 132"/><ellipse cx="116" cy="134" rx="4" ry="3"/></g>
+            <ellipse cx="124" cy="100" rx="20" ry="19" fill="#5a4c3b"/>
+            <ellipse cx="120" cy="98" rx="14" ry="15" fill="url(#eyeG)"/>
+            <path d="M110 84 l-8 -12 l-6 2" class="antenna" id="antenna"/>
+          </g>
+        </g>
+      </svg>
+      <div class="verdict" id="verdict">Waiting for a stimulus</div>
+    </div>
+
+    <h2>Behaviour</h2>
+    <div id="behaviours"></div>
+
+    <h2>Most active neurons <span class="tag" id="activeCount"></span></h2>
+    <div class="table-wrap"><table id="top"><thead><tr><th>cell type</th><th>class</th><th>side</th><th>Hz</th><th></th></tr></thead><tbody></tbody></table></div>
+  </section>
+</main>
+
+<footer>
+  Model: Shiu et al., <i>Nature</i> 2024 (leaky integrate-and-fire, every synapse of the FlyWire v783 connectome) &middot;
+  annotations: Schlegel et al., <i>Nature</i> 2024 &middot; simulated here with a numpy port of their equations.
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+:root {
+  --bg: #0b0d12;
+  --panel: #12151d;
+  --line: #222838;
+  --text: #e6e8ef;
+  --dim: #8b92a6;
+  --accent: #7cf2c4;
+  --accent2: #ffb454;
+  --hot: #ff5a7a;
+  --radius: 14px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: radial-gradient(1200px 600px at 50% -10%, #17203a 0%, var(--bg) 60%);
+  color: var(--text);
+  font: 14px/1.45 "Segoe UI", system-ui, sans-serif;
+  display: flex; flex-direction: column; min-height: 100vh;
+}
+header {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 14px 20px 6px; flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo { width: 34px; height: 34px; fill: var(--accent); stroke: var(--accent); stroke-width: 1.2; }
+h1 { margin: 0; font-size: 20px; letter-spacing: .3px; }
+header p { margin: 0; color: var(--dim); font-size: 13px; }
+.presets { display: flex; gap: 8px; flex-wrap: wrap; }
+.presets button { background: #1a2030; border: 1px solid var(--line); color: var(--text); padding: 6px 12px;
+  border-radius: 999px; cursor: pointer; font-size: 12.5px; }
+.presets button:hover { border-color: var(--accent); }
+
+main {
+  flex: 1; display: grid; gap: 14px; padding: 10px 20px;
+  grid-template-columns: 300px minmax(0, 1fr) 340px;
+  height: calc(100vh - 110px); min-height: 560px;
+}
+.controls, .side { overflow-y: auto; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; min-width: 0; }
+h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--dim); margin: 14px 0 8px; font-weight: 600; }
+h2:first-child { margin-top: 0; }
+.tag { text-transform: none; letter-spacing: 0; color: #5f6880; font-weight: 400; margin-left: 4px; }
+
+.sense { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 4px 10px;
+  padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; margin-bottom: 6px; background: #0f1219; }
+.sense.on { border-color: var(--c); box-shadow: inset 3px 0 0 var(--c); }
+.sense .name { font-weight: 600; }
+.sense .hz { color: var(--dim); font-variant-numeric: tabular-nums; font-size: 12px; min-width: 52px; text-align: right; }
+.sense input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--c); }
+.sense .info { grid-column: 1 / -1; color: #5f6880; font-size: 11.5px; margin-top: -2px; }
+.switch { appearance: none; width: 30px; height: 17px; border-radius: 9px; background: #2a3145; position: relative; cursor: pointer; margin: 0; }
+.switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 13px; height: 13px; border-radius: 50%; background: #9aa3b8; transition: .15s; }
+.switch:checked { background: var(--c); }
+.switch:checked::after { left: 15px; background: #0b0d12; }
+
+.row { display: flex; gap: 6px; align-items: center; }
+input, select { background: #0f1219; color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; font: inherit; min-width: 0; }
+#actType, #silType { flex: 1; }
+#actHz { width: 62px; }
+button.small { background: #1d2436; color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+button.small:hover:not(:disabled) { border-color: var(--accent); }
+button:disabled { opacity: .45; cursor: default; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; min-height: 4px; }
+.chip { background: #1b2233; border: 1px solid var(--line); border-radius: 999px; padding: 2px 4px 2px 10px; font-size: 12px; display: flex; gap: 6px; align-items: center; }
+.chip.kill { border-color: #5a2433; }
+.chip button { background: none; border: 0; color: var(--dim); cursor: pointer; font-size: 14px; padding: 0 4px; }
+.run-row { margin-top: 14px; justify-content: space-between; }
+.run-row label { color: var(--dim); font-size: 12px; display: flex; gap: 6px; align-items: center; }
+.run { width: 100%; margin-top: 12px; padding: 11px; border: 0; border-radius: 10px; cursor: pointer;
+  background: linear-gradient(90deg, #4be3b0, #7cc8ff); color: #071018; font-weight: 700; font-size: 15px; }
+.run.busy { background: linear-gradient(90deg, #2a3b4a, #3a4d63, #2a3b4a); background-size: 200% 100%; color: var(--text); animation: slide 1.2s linear infinite; }
+@keyframes slide { to { background-position: -200% 0; } }
+.status { color: var(--dim); font-size: 12.5px; margin: 8px 0 0; min-height: 18px; }
+
+.brain { position: relative; padding: 0; overflow: hidden; min-height: 460px; }
+#brain3d { width: 100%; height: 100%; display: block; cursor: grab; }
+#brain3d:active { cursor: grabbing; }
+.overlay { position: absolute; }
+.top-left { top: 12px; left: 14px; pointer-events: none; }
+.clock { font: 600 26px/1 "Cascadia Mono", Consolas, monospace; color: var(--accent); }
+.clock span { font-variant-numeric: tabular-nums; }
+.legend { margin-top: 8px; display: grid; gap: 3px; font-size: 11.5px; color: var(--dim); }
+.legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+.bottom { left: 12px; right: 12px; bottom: 12px; display: flex; gap: 8px; align-items: center;
+  background: rgba(10, 12, 18, .7); padding: 8px; border-radius: 10px; backdrop-filter: blur(6px); }
+.bottom input[type=range] { flex: 1; accent-color: var(--accent); }
+.hint { position: absolute; top: 14px; right: 14px; color: #4c556b; font-size: 11.5px; pointer-events: none; }
+
+.fly-stage { background: linear-gradient(#1a2134, #10141e); border-radius: 12px; border: 1px solid var(--line); overflow: hidden; }
+#fly { width: 100%; max-height: 260px; display: block; margin: 0 auto; }
+#fly .ground { stroke: #2b3347; stroke-width: 2; }
+#fly .legs path { fill: none; stroke: #2e261d; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+#fly .wing path { fill: rgba(190, 220, 255, .28); stroke: rgba(210, 230, 255, .6); stroke-width: 1; }
+#fly .stripes { fill: none; stroke: rgba(40, 28, 14, .55); stroke-width: 5; }
+#fly .antenna { fill: none; stroke: #3a3024; stroke-width: 3; stroke-linecap: round; }
+#fly .proboscis path { stroke: #6b5a43; stroke-width: 5; stroke-linecap: round; }
+#fly .proboscis ellipse { fill: #8a7457; }
+#fly .drop { fill: #7cc8ff; opacity: 0; }
+#fly g { transform-box: fill-box; }
+#wing { transform-origin: 0% 60%; }
+#legFront { transform-origin: 146px 112px; transform-box: view-box; }
+#antenna { transform-origin: 110px 84px; transform-box: view-box; }
+#proboscis { transform-origin: 118px 116px; transform-box: view-box; }
+#flyBody { transform-origin: 170px 166px; transform-box: view-box; }
+
+.fly-feed #proboscis { animation: feed 1.4s ease-in-out infinite; }
+.fly-feed #drop { opacity: 1; }
+@keyframes feed { 0%, 100% { transform: scaleY(1); } 40%, 70% { transform: scaleY(2.6) rotate(6deg); } }
+.fly-groom #legFront { animation: groom .35s ease-in-out infinite alternate; }
+.fly-groom #antenna { animation: twitch .35s ease-in-out infinite alternate; }
+@keyframes groom { from { transform: rotate(40deg); } to { transform: rotate(78deg); } }
+@keyframes twitch { from { transform: rotate(0); } to { transform: rotate(-14deg); } }
+.fly-escape #flyBody { animation: takeoff 1.6s cubic-bezier(.2,.7,.3,1) infinite; }
+.fly-escape #wing { animation: flap .05s linear infinite alternate; }
+@keyframes takeoff { 0% { transform: translate(0,0); opacity: 1; } 12% { transform: translate(4px,-10px); } 60% { transform: translate(140px,-170px) rotate(-18deg); opacity: 1; } 61% { opacity: 0; } 62% { transform: translate(0,0); opacity: 0; } 100% { opacity: 1; } }
+@keyframes flap { from { transform: rotate(-38deg) scaleY(.5); } to { transform: rotate(24deg); } }
+.fly-back #flyBody { animation: back 1.2s ease-in-out infinite; }
+.fly-back #legs path { animation: step .2s ease-in-out infinite alternate; }
+@keyframes back { 0%, 100% { transform: translateX(-30px); } 50% { transform: translateX(40px); } }
+@keyframes step { from { transform: translateX(-2px); } to { transform: translateX(3px); } }
+.fly-turn_l #flyBody { animation: turnl 1.4s ease-in-out infinite; }
+.fly-turn_r #flyBody { animation: turnr 1.4s ease-in-out infinite; }
+@keyframes turnl { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(.35) translateX(-30px); } }
+@keyframes turnr { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(.35) translateX(30px); } }
+.fly-idle #flyBody { animation: breathe 3s ease-in-out infinite; }
+@keyframes breathe { 50% { transform: translateY(-1px); } }
+
+.verdict { padding: 8px 12px; font-weight: 600; font-size: 15px; border-top: 1px solid var(--line); min-height: 38px; }
+.verdict small { display: block; color: var(--dim); font-weight: 400; font-size: 12px; }
+
+.beh { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; margin-bottom: 8px; }
+.beh .lab { font-size: 13px; }
+.beh .lab small { color: #5f6880; margin-left: 6px; }
+.beh .val { color: var(--dim); font-size: 12px; font-variant-numeric: tabular-nums; }
+.beh .bar { grid-column: 1 / -1; height: 7px; background: #1a2030; border-radius: 4px; overflow: hidden; }
+.beh .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .6s; border-radius: 4px; }
+.beh.win .lab { color: var(--accent); font-weight: 600; }
+
+.table-wrap { max-height: 260px; overflow: auto; border: 1px solid var(--line); border-radius: 10px; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th { position: sticky; top: 0; background: #151a25; text-align: left; color: var(--dim); font-weight: 600; padding: 6px 8px; }
+td { padding: 4px 8px; border-top: 1px solid #1a1f2c; white-space: nowrap; }
+td:nth-child(4) { text-align: right; font-variant-numeric: tabular-nums; }
+tr:hover td { background: #171d2a; }
+td button { background: none; border: 0; color: #6b7389; cursor: pointer; font-size: 11px; padding: 0; }
+td button:hover { color: var(--hot); }
+
+footer { color: #4c556b; font-size: 11.5px; padding: 6px 20px 14px; }
+
+@media (max-width: 1100px) {
+  main { grid-template-columns: 1fr; height: auto; flex: none; }
+  .controls, .side { overflow: visible; }
+  .brain { height: 420px; }
+}
+@media (max-width: 600px) {
+  header, main, footer { padding-left: 16px; padding-right: 16px; }
+}

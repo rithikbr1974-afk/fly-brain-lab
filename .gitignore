@@ -1,0 +1,5 @@
+.venv/
+.uv-cache/
+Drosophila_brain_model/
+data/
+__pycache__/
